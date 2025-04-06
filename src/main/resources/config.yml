@@ -1,0 +1,23 @@
+enable-xp-for:
+  brewing: true
+brewing-xp-amounts:
+  turtle_helmet: 2.0
+  rabbit_foot: 2.0
+  breeze_rod: 1.0
+  phantom_membrane: 1.0
+  ghast_tear: 1.0
+  slime_block: 1.0
+  cobweb: 1.0
+  dragon_breath: 1.0
+  golden_carrot: 0.7
+  blaze_powder: 0.7
+  glistering_melon_slice: 0.7
+  pufferfish: 0.7
+  gunpowder: 0.7
+  fermented_spider_eye: 0.7
+  magma_cream: 0.7
+  redstone: 0.5
+  glowstone_dust: 0.5
+  sugar: 0.5
+  spider_eye: 0.5
+  stone: 0.5
