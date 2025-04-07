@@ -1,9 +1,10 @@
-package simplexity.expandedexperience;
+package simplexity.expandedexperience.logic;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import simplexity.expandedexperience.ExpandedExperience;
 
 import java.util.Arrays;
 import java.util.HashMap;

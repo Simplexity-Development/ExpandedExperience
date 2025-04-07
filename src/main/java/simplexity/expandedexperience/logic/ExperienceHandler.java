@@ -1,4 +1,4 @@
-package simplexity.expandedexperience;
+package simplexity.expandedexperience.logic;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,6 +9,7 @@ import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import simplexity.expandedexperience.ExpandedExperience;
 import simplexity.expandedexperience.configs.ConfigHandler;
 
 import java.util.Map;

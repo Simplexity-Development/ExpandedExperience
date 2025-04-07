@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.Inventory;
-import simplexity.expandedexperience.ExperienceHandler;
+import simplexity.expandedexperience.logic.ExperienceHandler;
 
 public class InventoryClickListener implements Listener {
 

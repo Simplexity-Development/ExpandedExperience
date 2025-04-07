@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.inventory.ItemStack;
 import simplexity.expandedexperience.ExpandedExperience;
-import simplexity.expandedexperience.ExperienceHandler;
+import simplexity.expandedexperience.logic.ExperienceHandler;
 import simplexity.expandedexperience.configs.ConfigHandler;
 
 import java.util.logging.Logger;
