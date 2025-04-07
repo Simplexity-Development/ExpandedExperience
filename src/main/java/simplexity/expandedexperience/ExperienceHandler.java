@@ -49,6 +49,10 @@ public class ExperienceHandler {
         Double overflowExp = calculatedXp % 1.0;
         int xpToSpawn = (int) calculatedXp;
         brewingPdc.set(leftoverExp, PersistentDataType.DOUBLE, overflowExp);
+        if (xpToSpawn < 1) {
+            logger.info("no experience to spawn, leftover xp: " + overflowExp);
+            return;
+        }
         Location location = brewingStand.getLocation();
         ExperienceOrb expOrb = (ExperienceOrb) location.getWorld().spawnEntity(location, EntityType.EXPERIENCE_ORB);
         expOrb.setExperience(xpToSpawn);
