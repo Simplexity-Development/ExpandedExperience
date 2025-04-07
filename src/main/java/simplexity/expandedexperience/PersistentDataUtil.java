@@ -5,6 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -30,28 +31,28 @@ public class PersistentDataUtil {
         String pdcData = pdc.getOrDefault(key, PersistentDataType.STRING, "");
         Map<Material, Integer> materialMap = new HashMap<>();
         if (pdcData.isEmpty() || pdcData.isBlank()) return materialMap;
-        logger.info("pdc Data: " + pdcData);
         String[] mapEntries = pdcData.split(";");
-        logger.info("Map Entries: ");
         for (String entry : mapEntries) {
-            logger.info(entry);
             String[] entryParts = entry.split("=", 2);
             if (entryParts.length != 2) {
-                logger.warning("Issue deserializing information from PDC: Parts not equal to 2");
+                logger.warning("Issue deserializing information from PDC: Parts not equal to 2.");
+                logger.warning("'entry' String: " + entry);
+                logger.warning("parts: " + Arrays.toString(entryParts));
                 continue;
             }
-            logger.info("Material: " + entryParts[0]);
             Material material = Material.getMaterial(entryParts[0]);
             if (material == null) {
                 logger.warning("Issue deserializing information from PDC: Material is null");
+                logger.warning("'entry' String: " + entry);
+                logger.warning("Material string: " + entryParts[0]);
                 continue;
             }
-            logger.info("Times smelted: " + entryParts[1]);
             int timesSmelted;
             try {
                 timesSmelted = Integer.parseInt(entryParts[1]);
             } catch (NumberFormatException e) {
                 logger.warning("Issue deserializing information from PDC: Times Smelted is null, Material: " + material);
+                logger.warning("'entry' String: " + entry);
                 continue;
             }
             materialMap.put(material, timesSmelted);
