@@ -2,3 +2,11 @@ name: ExpandedExperience
 version: '0.0.0'
 main: simplexity.expandedexperience.ExpandedExperience
 api-version: '1.21'
+commands:
+  exp-reload:
+    permission: exp-exp.reload
+    description: Reloads the plugin configuration
+permissions:
+  exp-exp.reload:
+    default: op
+    description: Allows reloading the plugin configuration

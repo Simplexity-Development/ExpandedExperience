@@ -25,18 +25,18 @@ farming:
   xp-enabled: true
   require-tool: true
   valid-tools:
-    - "minecraft:wooden_hoe"
-    - "minecraft:stone_hoe"
-    - "minecraft:iron_hoe"
-    - "minecraft:golden_hoe"
-    - "minecraft:diamond_hoe"
-    - "minecraft:netherite_hoe"
-    - "minecraft:wooden_axe"
-    - "minecraft:stone_axe"
-    - "minecraft:iron_axe"
-    - "minecraft:golden_axe"
-    - "minecraft:diamond_axe"
-    - "minecraft:netherite_axe"
+    - WOODEN_HOE
+    - STONE_HOE
+    - IRON_HOE
+    - GOLDEN_HOE
+    - DIAMOND_HOE
+    - NETHERITE_HOE
+    - WOODEN_AXE
+    - STONE_AXE
+    - IRON_AXE
+    - GOLDEN_AXE
+    - DIAMOND_AXE
+    - NETHERITE_AXE
   xp-amounts:
     wheat: 0.1
     beetroot: 0.1

@@ -13,13 +13,11 @@ import simplexity.expandedexperience.ExpandedExperience;
 import simplexity.expandedexperience.configs.ConfigHandler;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class ExperienceHandler {
 
     private static ExperienceHandler instance;
 
-    private final Logger logger = ExpandedExperience.getInstance().getLogger();
     public static final NamespacedKey expKey = new NamespacedKey(ExpandedExperience.getInstance(), "ingredients-used");
     public static final NamespacedKey leftoverExp = new NamespacedKey(ExpandedExperience.getInstance(), "leftover-exp");
     public static final NamespacedKey harvestExp = new NamespacedKey(ExpandedExperience.getInstance(), "harvest-xp");
@@ -40,6 +38,7 @@ public class ExperienceHandler {
     }
 
     public void summonExpForBrewer(BrewingStand brewingStand) {
+        if (!ConfigHandler.getInstance().isBrewingXpEnabled()) return;
         PersistentDataContainer brewingPdc = brewingStand.getPersistentDataContainer();
         Map<Material, Double> xpValues = ConfigHandler.getInstance().getBrewingMaterialMap();
         Map<Material, Integer> storedInfo = PersistentDataUtil.loadMapFromPdc(brewingPdc, expKey);
@@ -57,7 +56,7 @@ public class ExperienceHandler {
         PersistentDataUtil.removeMapFromPdc(brewingStand.getPersistentDataContainer(), expKey);
     }
 
-    public void handlePlayerHarvestXp(Player player, Material material, Location brokenBlockLocation){
+    public void handlePlayerHarvestXp(Player player, Material material, Location brokenBlockLocation) {
         PersistentDataContainer playerPdc = player.getPersistentDataContainer();
         Double currentXpLevel = playerPdc.getOrDefault(harvestExp, PersistentDataType.DOUBLE, 0.0);
         Double amountToAdd = ConfigHandler.getInstance().getFarmingMaterialMap().get(material);
@@ -72,7 +71,7 @@ public class ExperienceHandler {
         spawnXpOrb(brokenBlockLocation, xpToSpawn);
     }
 
-    private void spawnXpOrb(Location location, int xpValue){
+    private void spawnXpOrb(Location location, int xpValue) {
         ExperienceOrb expOrb = (ExperienceOrb) location.getWorld().spawnEntity(location, EntityType.EXPERIENCE_ORB);
         expOrb.setExperience(xpValue);
     }
