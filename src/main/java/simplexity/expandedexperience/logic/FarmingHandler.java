@@ -30,13 +30,15 @@ public class FarmingHandler {
         if (ConfigHandler.getInstance().isFarmingXpRequiresTool() && !usingValidTool(player)) return;
         if (melonsAndStems.containsKey(blockMaterial) && !isAttachedToStem(block, melonsAndStems.get(blockMaterial)))
             return;
-        ExperienceHandler.getInstance().handlePlayerHarvestXp(player, blockMaterial, block.getLocation());
+        Double xpToAdd = ConfigHandler.getInstance().getFarmingMaterialMap().get(blockMaterial);
+        ExperienceHandler.getInstance().handleXp(player.getPersistentDataContainer(), xpToAdd, block.getLocation());
     }
 
     public static void handleFarmingMaterials(List<Material> materialList, Player player, Location location) {
         if (ConfigHandler.getInstance().isFarmingXpRequiresTool() && !usingValidTool(player)) return;
         for (Material material : materialList) {
-            ExperienceHandler.getInstance().handlePlayerHarvestXp(player, material, location);
+            Double xpToAdd = ConfigHandler.getInstance().getFarmingMaterialMap().get(material);
+            ExperienceHandler.getInstance().handleXp(player.getPersistentDataContainer(), xpToAdd, location);
         }
     }
 

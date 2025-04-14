@@ -47,3 +47,19 @@ farming:
     cocoa: 0.1
     sweet_berries: 0.05
     glow_berries: 0.05
+shearing:
+  xp-enabled: true
+  xp-amounts:
+    sheep: 0.2
+    mooshroom: 0.5
+    bogged: 0.7
+    snow_golem: 0.0
+archeology:
+  xp-enabled: true
+  xp-amounts:
+    suspicious_sand: 0.8
+    suspicious_gravel: 0.8
+misc:
+  xp-enabled: true
+  xp-amounts:
+    piglin-barter: 0.1
