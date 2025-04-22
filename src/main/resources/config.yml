@@ -60,6 +60,6 @@ archeology:
     suspicious_sand: 0.8
     suspicious_gravel: 0.8
 misc:
-  xp-enabled: true
+  xp-enabled: false
   xp-amounts:
     piglin-barter: 0.1
