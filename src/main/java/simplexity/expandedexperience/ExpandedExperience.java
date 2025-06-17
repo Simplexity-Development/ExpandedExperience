@@ -8,6 +8,7 @@ import simplexity.expandedexperience.listeners.BlockBreakListener;
 import simplexity.expandedexperience.listeners.BlockDropItemListener;
 import simplexity.expandedexperience.listeners.BlockHarvestListener;
 import simplexity.expandedexperience.listeners.BrewingListener;
+import simplexity.expandedexperience.listeners.EntityDeathListener;
 import simplexity.expandedexperience.listeners.InventoryClickListener;
 import simplexity.expandedexperience.listeners.ShearingListener;
 
@@ -36,6 +37,7 @@ public final class ExpandedExperience extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
         this.getServer().getPluginManager().registerEvents(new BlockHarvestListener(), this);
         this.getServer().getPluginManager().registerEvents(new ShearingListener(), this);
+        //this.getServer().getPluginManager().registerEvents(new EntityDeathListener(), this);
     }
 
     public static ExpandedExperience getInstance() {

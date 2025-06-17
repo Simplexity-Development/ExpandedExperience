@@ -25,9 +25,11 @@ public class ConfigHandler {
     private final HashMap<EntityType, Double> shearingXpMap = new HashMap<>();
     private final HashMap<Material, Double> archeologyXpMap = new HashMap<>();
     private final HashMap<Integer, Double> fortuneBoostXpMap = new HashMap<>();
+    private final HashMap<Integer, Double> lootingBoostXpMap = new HashMap<>();
     private Double barterXp = 0.0;
     private boolean brewingXpEnabled, farmingXpEnabled, farmingXpRequiresTool,
-            shearingXpEnabled, archeologyXpEnabled, miscXpEnabled, fortuneBoostEnabled;
+            shearingXpEnabled, archeologyXpEnabled, miscXpEnabled, fortuneBoostEnabled,
+            lootingBoostEnabled;
 
     public ConfigHandler() {
     }
@@ -47,6 +49,7 @@ public class ConfigHandler {
         archeologyXpEnabled = config.getBoolean("archeology.xp-enabled", true);
         miscXpEnabled = config.getBoolean("misc.xp-enabled", true);
         fortuneBoostEnabled = config.getBoolean("fortune-boost.enabled", true);
+        lootingBoostEnabled = config.getBoolean("looting-boost.enabled", true);
         barterXp = config.getDouble("misc.xp-amounts.piglin-barter", 0.1);
         ConfigurationSection brewingXpSection = config.getConfigurationSection("brewing.xp-amounts");
         ConfigurationSection farmingXpSection = config.getConfigurationSection("farming.xp-amounts");
@@ -54,12 +57,14 @@ public class ConfigHandler {
         ConfigurationSection shearingXpSection = config.getConfigurationSection("shearing.xp-amounts");
         ConfigurationSection archeologyXpSection = config.getConfigurationSection("archeology.xp-amounts");
         ConfigurationSection fortuneBoostSection = config.getConfigurationSection("fortune-boost.level-multipliers");
+        ConfigurationSection lootingBoostSection = config.getConfigurationSection("looting-boost.level-multipliers");
         validateMaterialMap(brewingXpSection, brewingXpMap);
         validateMaterialMap(farmingXpSection, farmingXpMap);
         validateMaterialMap(archeologyXpSection, archeologyXpMap);
         validateMaterialSet(toolStringList, validFarmingTools);
         validateEntityMap(shearingXpSection, shearingXpMap);
         validateIntegerDoubleMap(fortuneBoostSection, fortuneBoostXpMap);
+        validateIntegerDoubleMap(lootingBoostSection, lootingBoostXpMap);
     }
 
 
@@ -152,6 +157,10 @@ public class ConfigHandler {
         return fortuneBoostXpMap;
     }
 
+    public HashMap<Integer, Double> getLootingBoostXpMap() {
+        return lootingBoostXpMap;
+    }
+
     public boolean isBrewingXpEnabled() {
         return brewingXpEnabled;
     }
@@ -186,5 +195,9 @@ public class ConfigHandler {
 
     public boolean isFortuneBoostEnabled() {
         return fortuneBoostEnabled;
+    }
+
+    public boolean isLootingBoostEnabled() {
+        return lootingBoostEnabled;
     }
 }

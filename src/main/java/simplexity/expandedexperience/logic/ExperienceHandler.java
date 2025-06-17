@@ -108,6 +108,27 @@ public class ExperienceHandler {
         return (int) newXp;
     }
 
+    /**
+     * Calculates the new xp value for looting xp boost. This will return the original value if looting is not present
+     * on the used item. If looting is present and the config has looting boost disabled, and the looting level has not
+     * been configured (i.e. looting 10 or something) the multiplier will be calculated by (level * 0.5) + 1
+     *
+     * @param originalXp Original xp value that was set to drop in the event
+     * @param itemUsed Item used to break the block
+     * @return new xp value to spawn
+     */
+
+    public int getLootingXp(int originalXp, ItemStack itemUsed){
+        if (!ConfigHandler.getInstance().isLootingBoostEnabled()) return originalXp;
+        Map<Enchantment, Integer> enchants = itemUsed.getEnchantments();
+        if (enchants.isEmpty() || !enchants.containsKey(Enchantment.LOOTING)) return originalXp;
+        int level = enchants.get(Enchantment.LOOTING);
+        Double multiplier = ConfigHandler.getInstance().getLootingBoostXpMap().get(level);
+        if (multiplier == null) multiplier = (level * 0.5) + 1;
+        double newXp = multiplier * originalXp;
+        return (int) newXp;
+    }
+
     private void spawnXpOrb(Location location, int xpValue) {
         ExperienceOrb expOrb = (ExperienceOrb) location.getWorld().spawnEntity(location, EntityType.EXPERIENCE_ORB);
         expOrb.setExperience(xpValue);
