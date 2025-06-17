@@ -14,7 +14,6 @@ import simplexity.expandedexperience.ExpandedExperience;
 import simplexity.expandedexperience.configs.ConfigHandler;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class ExperienceHandler {
 
@@ -89,15 +88,22 @@ public class ExperienceHandler {
         spawnXpOrb(locationForXp, xpToSpawn);
     }
 
+    /**
+     * Calculates the new xp value for fortune xp boost. This will return the original value if fortune is not present
+     * on the used item. If fortune is present and the config has fortune boost disabled, and the fortune level has not
+     * been configured (i.e. fortune 10 or something) the multiplier will be calculated by (level * 0.5) + 1
+     *
+     * @param originalXp Original xp value that was set to drop in the event
+     * @param itemUsed Item used to break the block
+     * @return new xp value to spawn
+     */
     public int getFortuneXp(int originalXp, ItemStack itemUsed){
-        Logger logger = ExpandedExperience.getInstance().getLogger();
         if (!ConfigHandler.getInstance().isFortuneBoostEnabled()) return originalXp;
         Map<Enchantment, Integer> enchants = itemUsed.getEnchantments();
-        logger.info(enchants.keySet().toString());
         if (enchants.isEmpty() || !enchants.containsKey(Enchantment.FORTUNE)) return originalXp;
         int level = enchants.get(Enchantment.FORTUNE);
         Double multiplier = ConfigHandler.getInstance().getFortuneBoostXpMap().get(level);
-        if (multiplier == null) return originalXp;
+        if (multiplier == null) multiplier = (level * 0.5) + 1;
         double newXp = multiplier * originalXp;
         return (int) newXp;
     }
