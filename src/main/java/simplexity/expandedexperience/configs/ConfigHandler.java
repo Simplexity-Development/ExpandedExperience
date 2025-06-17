@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class ConfigHandler {
 
     private static ConfigHandler instance;
@@ -23,9 +24,10 @@ public class ConfigHandler {
     private final HashSet<Material> validFarmingTools = new HashSet<>();
     private final HashMap<EntityType, Double> shearingXpMap = new HashMap<>();
     private final HashMap<Material, Double> archeologyXpMap = new HashMap<>();
+    private final HashMap<Integer, Double> fortuneBoostXpMap = new HashMap<>();
     private Double barterXp = 0.0;
     private boolean brewingXpEnabled, farmingXpEnabled, farmingXpRequiresTool,
-            shearingXpEnabled, archeologyXpEnabled, miscXpEnabled;
+            shearingXpEnabled, archeologyXpEnabled, miscXpEnabled, fortuneBoostEnabled;
 
     public ConfigHandler() {
     }
@@ -44,17 +46,20 @@ public class ConfigHandler {
         shearingXpEnabled = config.getBoolean("shearing.xp-enabled", true);
         archeologyXpEnabled = config.getBoolean("archeology.xp-enabled", true);
         miscXpEnabled = config.getBoolean("misc.xp-enabled", true);
+        fortuneBoostEnabled = config.getBoolean("fortune-boost.enabled", true);
         barterXp = config.getDouble("misc.xp-amounts.piglin-barter", 0.1);
         ConfigurationSection brewingXpSection = config.getConfigurationSection("brewing.xp-amounts");
         ConfigurationSection farmingXpSection = config.getConfigurationSection("farming.xp-amounts");
         List<String> toolStringList = config.getStringList("farming.valid-tools");
         ConfigurationSection shearingXpSection = config.getConfigurationSection("shearing.xp-amounts");
         ConfigurationSection archeologyXpSection = config.getConfigurationSection("archeology.xp-amounts");
+        ConfigurationSection fortuneBoostSection = config.getConfigurationSection("fortune-boost.level-multipliers");
         validateMaterialMap(brewingXpSection, brewingXpMap);
         validateMaterialMap(farmingXpSection, farmingXpMap);
         validateMaterialMap(archeologyXpSection, archeologyXpMap);
         validateMaterialSet(toolStringList, validFarmingTools);
         validateEntityMap(shearingXpSection, shearingXpMap);
+        validateIntegerDoubleMap(fortuneBoostSection, fortuneBoostXpMap);
     }
 
 
@@ -74,6 +79,25 @@ public class ConfigHandler {
             }
             Double xpAmount = config.getDouble(key);
             mapToFill.put(material, xpAmount);
+        }
+    }
+
+    private void validateIntegerDoubleMap(ConfigurationSection config, HashMap<Integer, Double> mapToFill) {
+        mapToFill.clear();
+        if (config == null) {
+            logger.warning("Problem reloading xp configurations, please check that your configurations are valid and that you did not use TAB instead of SPACE");
+            return;
+        }
+        Set<String> mapKeys = config.getKeys(false);
+
+        for (String key : mapKeys) {
+            try {
+                Integer level = Integer.parseInt(key);
+                Double multiplier = config.getDouble(key, 1.0);
+                mapToFill.put(level, multiplier);
+            } catch (NumberFormatException e) {
+                logger.warning("Issue trying to get configuration from " + config + " please check your syntax");
+            }
         }
     }
 
@@ -116,12 +140,16 @@ public class ConfigHandler {
         return farmingXpMap;
     }
 
-    public HashMap<EntityType, Double> getShearingMap(){
+    public HashMap<EntityType, Double> getShearingMap() {
         return shearingXpMap;
     }
 
-    public HashMap<Material, Double> getArcheologyMap(){
+    public HashMap<Material, Double> getArcheologyMap() {
         return archeologyXpMap;
+    }
+
+    public HashMap<Integer, Double> getFortuneBoostXpMap() {
+        return fortuneBoostXpMap;
     }
 
     public boolean isBrewingXpEnabled() {
@@ -156,7 +184,7 @@ public class ConfigHandler {
         return miscXpEnabled;
     }
 
-    public void setMiscXpEnabled(boolean miscXpEnabled) {
-        this.miscXpEnabled = miscXpEnabled;
+    public boolean isFortuneBoostEnabled() {
+        return fortuneBoostEnabled;
     }
 }

@@ -21,7 +21,9 @@ public final class ExpandedExperience extends JavaPlugin {
         instance = this;
         saveDefaultConfig();
         getConfig().options().copyDefaults(true);
+        saveConfig();
         ConfigHandler.getInstance().reloadConfigValues();
+        //noinspection DataFlowIssue
         this.getCommand("exp-reload").setExecutor(new ExpReload());
         loadListeners();
     }

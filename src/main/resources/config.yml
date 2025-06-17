@@ -59,6 +59,12 @@ archeology:
   xp-amounts:
     suspicious_sand: 0.8
     suspicious_gravel: 0.8
+fortune-boost:
+  enabled: true
+  level-multipliers:
+    1: 1.5
+    2: 2.0
+    3: 2.5
 misc:
   xp-enabled: false
   xp-amounts:

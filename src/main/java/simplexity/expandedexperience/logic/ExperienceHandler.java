@@ -4,14 +4,17 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BrewingStand;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import simplexity.expandedexperience.ExpandedExperience;
 import simplexity.expandedexperience.configs.ConfigHandler;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class ExperienceHandler {
 
@@ -39,6 +42,7 @@ public class ExperienceHandler {
     /**
      * Handles the spawning of stored experience on a brewing stand. Brewing stand experience is stored as 'ingredients used'
      * and when broken or an item is removed, the configured amounts are multiplied by how many times that ingredient was used
+     *
      * @param brewingStand BrewingStand block
      */
 
@@ -51,12 +55,15 @@ public class ExperienceHandler {
         for (Material material : storedInfo.keySet()) {
             Integer timesUsed = storedInfo.get(material);
             double xpForMaterial = timesUsed * xpValues.get(material);
-            calculatedXp = calculatedXp + xpForMaterial;
+            calculatedXp += xpForMaterial;
         }
-        Double overflowExp = calculatedXp % 1.0;
         int xpToSpawn = (int) calculatedXp;
-        brewingPdc.set(LEFTOVER_BLOCK_EXP, PersistentDataType.DOUBLE, overflowExp);
-        if (xpToSpawn < 1) return;
+        if (xpToSpawn < 1) {
+            brewingPdc.set(LEFTOVER_BLOCK_EXP, PersistentDataType.DOUBLE, calculatedXp);
+            return;
+        }
+        calculatedXp -= xpToSpawn;
+        brewingPdc.set(LEFTOVER_BLOCK_EXP, PersistentDataType.DOUBLE, calculatedXp);
         spawnXpOrb(brewingStand.getLocation(), xpToSpawn);
         PersistentDataUtil.removeMapFromPdc(brewingStand.getPersistentDataContainer(), INGREDIENTS_USED);
     }
@@ -64,8 +71,9 @@ public class ExperienceHandler {
     /**
      * Handles storage and spawning of experience orbs. Adds new xp to the stored amount, and leaves the overflow.
      * Input is a Player, or an entity to store the xp on if a player is not available.
-     * @param pdc Persistent Data Container
-     * @param xpToAdd Amount of xp to add to the stored xp
+     *
+     * @param pdc           Persistent Data Container
+     * @param xpToAdd       Amount of xp to add to the stored xp
      * @param locationForXp Location that experience orbs should be spawned if the amount is over 1
      */
     public void handleXp(PersistentDataContainer pdc, Double xpToAdd, Location locationForXp) {
@@ -75,10 +83,23 @@ public class ExperienceHandler {
             pdc.set(PLAYER_EXP, PersistentDataType.DOUBLE, combined);
             return;
         }
-        double leftover = combined % 1.0;
         int xpToSpawn = (int) combined;
+        double leftover = combined - xpToSpawn;
         pdc.set(PLAYER_EXP, PersistentDataType.DOUBLE, leftover);
         spawnXpOrb(locationForXp, xpToSpawn);
+    }
+
+    public int getFortuneXp(int originalXp, ItemStack itemUsed){
+        Logger logger = ExpandedExperience.getInstance().getLogger();
+        if (!ConfigHandler.getInstance().isFortuneBoostEnabled()) return originalXp;
+        Map<Enchantment, Integer> enchants = itemUsed.getEnchantments();
+        logger.info(enchants.keySet().toString());
+        if (enchants.isEmpty() || !enchants.containsKey(Enchantment.FORTUNE)) return originalXp;
+        int level = enchants.get(Enchantment.FORTUNE);
+        Double multiplier = ConfigHandler.getInstance().getFortuneBoostXpMap().get(level);
+        if (multiplier == null) return originalXp;
+        double newXp = multiplier * originalXp;
+        return (int) newXp;
     }
 
     private void spawnXpOrb(Location location, int xpValue) {
