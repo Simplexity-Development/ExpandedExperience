@@ -30,8 +30,8 @@ public class BlockBreakListener implements Listener {
             return;
         }
         if (xp == 0) return;
-        int fortuneBoostXp = ExperienceHandler.getInstance().getFortuneXp(xp, itemUsed);
-        if (xp == fortuneBoostXp) return;
-        blockBreakEvent.setExpToDrop(fortuneBoostXp);
+        double fortuneBoostXp = ExperienceHandler.getInstance().getFortuneXp(xp, itemUsed);
+        if ((double) xp == fortuneBoostXp) return;
+        blockBreakEvent.setExpToDrop((int) fortuneBoostXp);
     }
 }

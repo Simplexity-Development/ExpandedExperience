@@ -93,19 +93,18 @@ public class ExperienceHandler {
      * on the used item. If fortune is present and the config has fortune boost disabled, and the fortune level has not
      * been configured (i.e. fortune 10 or something) the multiplier will be calculated by (level * 0.5) + 1
      *
-     * @param originalXp Original xp value that was set to drop in the event
-     * @param itemUsed Item used to break the block
-     * @return new xp value to spawn
+     * @param originalXp double - Original xp value that was set to drop in the event
+     * @param itemUsed   ItemStack - Item used to break the block
+     * @return double - new xp value to spawn (Will be cast to int in various methods)
      */
-    public int getFortuneXp(int originalXp, ItemStack itemUsed){
+    public double getFortuneXp(double originalXp, ItemStack itemUsed) {
         if (!ConfigHandler.getInstance().isFortuneBoostEnabled()) return originalXp;
         Map<Enchantment, Integer> enchants = itemUsed.getEnchantments();
         if (enchants.isEmpty() || !enchants.containsKey(Enchantment.FORTUNE)) return originalXp;
         int level = enchants.get(Enchantment.FORTUNE);
         Double multiplier = ConfigHandler.getInstance().getFortuneBoostXpMap().get(level);
         if (multiplier == null) multiplier = (level * 0.5) + 1;
-        double newXp = multiplier * originalXp;
-        return (int) newXp;
+        return multiplier * originalXp;
     }
 
     /**
@@ -114,19 +113,19 @@ public class ExperienceHandler {
      * been configured (i.e. looting 10 or something) the multiplier will be calculated by (level * 0.5) + 1
      *
      * @param originalXp Original xp value that was set to drop in the event
-     * @param itemUsed Item used to break the block
+     * @param itemUsed   Item used to break the block
      * @return new xp value to spawn
      */
 
-    public int getLootingXp(int originalXp, ItemStack itemUsed){
+    public double getLootingXp(double originalXp, ItemStack itemUsed) {
         if (!ConfigHandler.getInstance().isLootingBoostEnabled()) return originalXp;
         Map<Enchantment, Integer> enchants = itemUsed.getEnchantments();
         if (enchants.isEmpty() || !enchants.containsKey(Enchantment.LOOTING)) return originalXp;
         int level = enchants.get(Enchantment.LOOTING);
         Double multiplier = ConfigHandler.getInstance().getLootingBoostXpMap().get(level);
         if (multiplier == null) multiplier = (level * 0.5) + 1;
-        double newXp = multiplier * originalXp;
-        return (int) newXp;
+        return multiplier * originalXp;
+
     }
 
     private void spawnXpOrb(Location location, int xpValue) {

@@ -27,15 +27,17 @@ public class FarmingHandler {
 
     public static void handleFarmingBlock(@NotNull Block block, Player player) {
         Material blockMaterial = block.getType();
-        if (ConfigHandler.getInstance().isFarmingXpRequiresTool() && !usingValidTool(player)) return;
-        if (melonsAndStems.containsKey(blockMaterial) && !isAttachedToStem(block, melonsAndStems.get(blockMaterial)))
-            return;
+        ItemStack tool = getToolIfValid(player);
+        if (ConfigHandler.getInstance().isFarmingXpRequiresTool() && tool == null) return;
+        if (melonsAndStems.containsKey(blockMaterial) && !isAttachedToStem(block, melonsAndStems.get(blockMaterial))) return;
         Double xpToAdd = ConfigHandler.getInstance().getFarmingMaterialMap().get(blockMaterial);
+        xpToAdd = ExperienceHandler.getInstance().getFortuneXp(xpToAdd, tool);
         ExperienceHandler.getInstance().handleXp(player.getPersistentDataContainer(), xpToAdd, block.getLocation());
     }
 
     public static void handleFarmingMaterials(List<Material> materialList, Player player, Location location) {
-        if (ConfigHandler.getInstance().isFarmingXpRequiresTool() && !usingValidTool(player)) return;
+        ItemStack tool = getToolIfValid(player);
+        if (ConfigHandler.getInstance().isFarmingXpRequiresTool() && tool == null) return;
         for (Material material : materialList) {
             Double xpToAdd = ConfigHandler.getInstance().getFarmingMaterialMap().get(material);
             ExperienceHandler.getInstance().handleXp(player.getPersistentDataContainer(), xpToAdd, location);
@@ -54,10 +56,11 @@ public class FarmingHandler {
         return false;
     }
 
-    private static boolean usingValidTool(Player player) {
+    private static ItemStack getToolIfValid(Player player) {
         ItemStack toolInMainHand = player.getInventory().getItemInMainHand();
-        if (toolInMainHand.isEmpty()) return false;
-        return ConfigHandler.getInstance().getValidFarmingTools().contains(toolInMainHand.getType());
+        if (toolInMainHand.isEmpty()) return null;
+        if (ConfigHandler.getInstance().getValidFarmingTools().contains(toolInMainHand.getType())) return toolInMainHand;
+        return null;
     }
 
 }

@@ -20,9 +20,9 @@ public class EntityDeathListener implements Listener {
         if (droppingXp == 0) return;
         ItemStack weapon = player.getInventory().getItemInMainHand();
         if (weapon.isEmpty()) return;
-        int newXp = ExperienceHandler.getInstance().getLootingXp(droppingXp, weapon);
-        if (newXp == droppingXp) return;
-        deathEvent.setDroppedExp(newXp);
+        double newXp = ExperienceHandler.getInstance().getLootingXp(droppingXp, weapon);
+        if (newXp == (double) droppingXp) return;
+        deathEvent.setDroppedExp((int) newXp);
     }
 
 
