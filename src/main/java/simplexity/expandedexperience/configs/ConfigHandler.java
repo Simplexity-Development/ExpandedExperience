@@ -29,7 +29,7 @@ public class ConfigHandler {
     private Double barterXp = 0.0;
     private boolean brewingXpEnabled, farmingXpEnabled, farmingXpRequiresTool,
             shearingXpEnabled, archeologyXpEnabled, miscXpEnabled, fortuneBoostEnabled,
-            lootingBoostEnabled;
+            lootingBoostEnabled, farmingApplyFortuneBoost;
 
     public ConfigHandler() {
     }
