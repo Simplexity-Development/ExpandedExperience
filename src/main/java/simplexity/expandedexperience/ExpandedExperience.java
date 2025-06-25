@@ -1,5 +1,6 @@
 package simplexity.expandedexperience;
 
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.plugin.java.JavaPlugin;
 import simplexity.expandedexperience.commands.ExpReload;
 import simplexity.expandedexperience.configs.ConfigHandler;
@@ -8,10 +9,11 @@ import simplexity.expandedexperience.listeners.BlockBreakListener;
 import simplexity.expandedexperience.listeners.BlockDropItemListener;
 import simplexity.expandedexperience.listeners.BlockHarvestListener;
 import simplexity.expandedexperience.listeners.BrewingListener;
-import simplexity.expandedexperience.listeners.EntityDeathListener;
 import simplexity.expandedexperience.listeners.InventoryClickListener;
 import simplexity.expandedexperience.listeners.ShearingListener;
+import simplexity.expandedexperience.util.Constants;
 
+@SuppressWarnings("UnstableApiUsage")
 public final class ExpandedExperience extends JavaPlugin {
 
     private static ExpandedExperience instance;
@@ -24,12 +26,14 @@ public final class ExpandedExperience extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
         ConfigHandler.getInstance().reloadConfigValues();
-        //noinspection DataFlowIssue
-        this.getCommand("exp-reload").setExecutor(new ExpReload());
+        getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
+            commands.registrar().register(ExpReload.createCommand());
+        });
+        getServer().getPluginManager().addPermission(Constants.RELOAD);
         loadListeners();
     }
 
-    private void loadListeners(){
+    private void loadListeners() {
         this.getServer().getPluginManager().registerEvents(new BarterListener(), this);
         this.getServer().getPluginManager().registerEvents(new BrewingListener(), this);
         this.getServer().getPluginManager().registerEvents(new BlockDropItemListener(), this);

@@ -1,0 +1,4 @@
+name: ExpandedExperience
+version: '${project.version}'
+main: simplexity.expandedexperience.ExpandedExperience
+api-version: '1.21'

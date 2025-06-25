@@ -1,16 +1,23 @@
 package simplexity.expandedexperience.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 import simplexity.expandedexperience.configs.ConfigHandler;
+import simplexity.expandedexperience.util.Constants;
 
-public class ExpReload implements CommandExecutor {
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
-        ConfigHandler.getInstance().reloadConfigValues();
-        sender.sendMessage("Expanded Experience Config Reloaded");
-        return false;
+@SuppressWarnings("UnstableApiUsage")
+public class ExpReload {
+    public static LiteralCommandNode<CommandSourceStack> createCommand() {
+        return Commands.literal("exp-reload")
+                .requires(css -> css.getSender().hasPermission(Constants.RELOAD))
+                .executes(ctx -> {
+                    CommandSender sender = ctx.getSource().getSender();
+                    ConfigHandler.getInstance().reloadConfigValues();
+                    sender.sendRichMessage("Expanded Experience was reloaded");
+                    return Command.SINGLE_SUCCESS;
+                }).build();
     }
 }
